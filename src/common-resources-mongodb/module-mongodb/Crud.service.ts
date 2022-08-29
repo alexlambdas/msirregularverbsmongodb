@@ -62,18 +62,14 @@ export class CrudService  implements CrudInterface{
             await this.circuitBreaker.exex();
 
             //
-            await this.db.customGetConnection(mongodbMetaData.backEndUrl, createDbConnectionDto);
-
-            //
             timeInit = (new Date()).getTime();
+            await this.db.customGetConnection(mongodbMetaData.backEndUrl, createDbConnectionDto);
             response = await this.customCrudMongodb(mongodbMetaData);
+            await this.db.customCloseConnection();
             timeEnd = (new Date()).getTime();
 
             //
             await this.circuitBreaker.updateBreakerState("SUCCESS");
-
-            //
-            await this.db.customCloseConnection();
 
             //
             this.logForSuccessTransaction(mongodbMetaData, timeInit, timeEnd, response);

@@ -3,8 +3,8 @@ import { CreateDbConnectionDto } from "../dtos/CreateDbConnection.dto";
 export const I_MONGO_DB = "I_MONGO_DB";
 
 export interface MongodbInterface {
-    customGetConnection(dbUrl: string, createDbConnectionDto: CreateDbConnectionDto): Promise<any>;
-    customCloseConnection(): Promise<any>;
+    customGetConnection(dbUrl: string, createDbConnectionDto: CreateDbConnectionDto): Promise<void>;
+    customCloseConnection(): Promise<void>;
     customFind(mongooseModel: any): Promise<string>;
     customFindByParams(mongooseModel: any, paramsObjectDto: string): Promise<string>;
     customFindOne(bodyDto: string, mongooseModel: any): Promise<string>;

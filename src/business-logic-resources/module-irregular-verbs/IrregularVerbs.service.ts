@@ -7,44 +7,11 @@ export class IrregularVerbsService{
 
     constructor(@Inject(I_CRUD) private mongodb: CrudInterface){}
 
-    public async getAll(mongodbMetaData: MongodbMetaDataDto): Promise<string>{
-
-        //
-        let responseList: string;
-        responseList = await this.mongodb.crud(mongodbMetaData);
-        return responseList;
-    }
-
-    public async getById(mongodbMetaData: MongodbMetaDataDto): Promise<string>{
+    public async crudMongodb(mongodbMetaData: MongodbMetaDataDto): Promise<string>{
 
         //
         let response: string;
         response = await this.mongodb.crud(mongodbMetaData);
         return response;
     }
-
-    public async postOne(mongodbMetaData: MongodbMetaDataDto): Promise<string>{
-
-        //
-        let response: string;
-        response = await this.mongodb.crud(mongodbMetaData);
-        return response;
-    }
-
-    public async delOne(mongodbMetaData: MongodbMetaDataDto): Promise<string>{
-
-        //
-        let response: string;
-        response = await this.mongodb.crud(mongodbMetaData);
-        return response;
-    }
-
-    public async updateOne(mongodbMetaData: MongodbMetaDataDto): Promise<string>{
-
-        //
-        let response: string;
-        response = await this.mongodb.crud(mongodbMetaData);
-        return response;
-    }
-
 }

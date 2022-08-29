@@ -19,7 +19,7 @@ import { IrregularVerbsService } from "./IrregularVerbs.service";
  * @description
  * 
  */
-@Controller("/MSIrregularVerbs/microservice/crud")
+@Controller("/app/rs/portfolio/msirregularverbsmongodb/crud")
 export class IrregularVerbsController{
 
     constructor(
@@ -62,7 +62,7 @@ export class IrregularVerbsController{
 
         //
         timeInit = new Date().getTime();
-        response = JSON.parse(await this.irregularVerbsService.getAll(mongodbMetaData));
+        response = JSON.parse(await this.irregularVerbsService.crudMongodb(mongodbMetaData));
         timeEnd = new Date().getTime();
 
         //
@@ -129,7 +129,7 @@ export class IrregularVerbsController{
 
         //
         timeInit = new Date().getTime();
-        response = JSON.parse(await this.irregularVerbsService.getById(mongodbMetaData));
+        response = JSON.parse(await this.irregularVerbsService.crudMongodb(mongodbMetaData));
         timeEnd = new Date().getTime();
         
         //
@@ -198,7 +198,7 @@ export class IrregularVerbsController{
 
         //
         timeInit = new Date().getTime();
-        response = JSON.parse(await this.irregularVerbsService.postOne(mongodbMetaData));
+        response = JSON.parse(await this.irregularVerbsService.crudMongodb(mongodbMetaData));
         timeEnd = new Date().getTime();
 
         //
@@ -256,7 +256,7 @@ export class IrregularVerbsController{
 
         //
         timeInit = new Date().getTime();
-        response = JSON.parse(await this.irregularVerbsService.delOne(mongodbMetaData));
+        response = JSON.parse(await this.irregularVerbsService.crudMongodb(mongodbMetaData));
         timeEnd = new Date().getTime();
         
         //
@@ -316,7 +316,7 @@ export class IrregularVerbsController{
 
         //
         timeInit = new Date().getTime();
-        response = JSON.parse(await this.irregularVerbsService.postOne(mongodbMetaData));
+        response = JSON.parse(await this.irregularVerbsService.crudMongodb(mongodbMetaData));
         timeEnd = new Date().getTime();
 
         //

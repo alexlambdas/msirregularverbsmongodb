@@ -21,7 +21,7 @@ export class MongodbService implements MongodbInterface{
      * 
      * 
      */
-    async customGetConnection(dbUrl: string, createDbConnectionDto: CreateDbConnectionDto): Promise<any>{
+    async customGetConnection(dbUrl: string, createDbConnectionDto: CreateDbConnectionDto): Promise<void>{
         try{
             await mongoose.connect(dbUrl, {...createDbConnectionDto});
         }
@@ -38,7 +38,7 @@ export class MongodbService implements MongodbInterface{
      * 
      * 
      */
-    async customCloseConnection(): Promise<any>{
+    async customCloseConnection(): Promise<void>{
         try{
             await mongoose.connection.close();
         }
