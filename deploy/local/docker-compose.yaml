@@ -1,0 +1,30 @@
+version: "3.7"
+###
+services:
+    msirregularverbsmongodb:
+        image: alexlambdas/msirregularverbsmongodb:v.0.0.1
+        container_name: msirregularverbsmongodb
+        ports:
+            - 3000:3000
+        networks:
+            - net-apis
+        environment:
+            - NODE_ENV_APPLICATION_NAME=MSIrregularVerbsMongodb
+            - NODE_ENV_METHOD_NAME=irregular-verbs
+            - NODE_ENV_URL_MONGO_DB=mongodb://localhost:27017/alexlambdas
+            - NODE_ENV_USER_MONGO_DB=
+            - NODE_ENV_PASS_MONGO_DB=
+            - NODE_ENV_TIMEOUT_MONGO_DB=10000
+            - NODE_ENV_CIRCUIT_BREAKER_FAILURE_THRESHOLD=5
+            - NODE_ENV_CIRCUIT_BREAKER_SUCCESS_THRESHOLD=3
+            - NODE_ENV_CIRCUIT_BREAKER_TIMEOUT=30000
+        deploy:
+            resources:
+                limits:
+                    cpus: 0.20
+                    memory: 128M
+
+###
+networks:
+    net-apis:
+        external: true
