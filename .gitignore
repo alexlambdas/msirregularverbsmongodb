@@ -2,6 +2,9 @@
 /dist
 /node_modules
 
+# Sonar-Qube
+.scannerwork
+
 # Logs
 logs
 *.log
