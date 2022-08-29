@@ -3,6 +3,7 @@
 /node_modules
 
 # Sonar-Qube
+/.scannerwork
 .scannerwork
 
 # Logs

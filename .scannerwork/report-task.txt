@@ -1,6 +1,0 @@
-projectKey=common-resources-mongodb
-serverUrl=http://localhost:9012
-serverVersion=9.2.4.50792
-dashboardUrl=http://localhost:9012/dashboard?id=common-resources-mongodb
-ceTaskId=AYLnYFLnnocT8XVpRw7M
-ceTaskUrl=http://localhost:9012/api/ce/task?id=AYLnYFLnnocT8XVpRw7M
