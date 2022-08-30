@@ -1,6 +1,7 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, Query, Req, UseFilters, UsePipes, ValidationPipe } from "@nestjs/common";
 import { ApiHeader, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { Request } from "express";
+import { ResponseUpdateDto } from "src/common-resources-mongodb/dtos/ResponseUpdate.dto";
 import { FaultDto } from "../../common-resources-mongodb/dtos/Fault.fault.dto";
 import { LoggerDto } from "../../common-resources-mongodb/dtos/Logger.dto";
 import { MongodbMetaDataDto } from "../../common-resources-mongodb/dtos/MongodbMetaData.dto";
@@ -144,7 +145,6 @@ export class IrregularVerbsController{
         status: 200,
         description: 'Json object for success transaction.',
         type: IrregularVerbDto,
-        isArray: true
     })
     @ApiResponse({
         status: 400,
@@ -245,7 +245,7 @@ export class IrregularVerbsController{
         status: 200,
         description: 'Json object for success transaction.',
         type: IrregularVerbDto,
-        isArray: true
+        isArray: true,
     })
     @ApiResponse({
         status: 400,
@@ -332,10 +332,9 @@ export class IrregularVerbsController{
         required: false,
     })
     @ApiResponse({
-        status: 200,
+        status: 201,
         description: 'Json object for success transaction.',
         type: IrregularVerbDto,
-        isArray: true
     })
     @ApiResponse({
         status: 400,
@@ -424,8 +423,7 @@ export class IrregularVerbsController{
     @ApiResponse({
         status: 200,
         description: 'Json object for success transaction.',
-        type: IrregularVerbDto,
-        isArray: true
+        type: ResponseDeleteDto,
     })
     @ApiResponse({
         status: 400,
@@ -515,8 +513,7 @@ export class IrregularVerbsController{
     @ApiResponse({
         status: 200,
         description: 'Json object for success transaction.',
-        type: IrregularVerbDto,
-        isArray: true
+        type: ResponseUpdateDto,
     })
     @ApiResponse({
         status: 400,
@@ -538,7 +535,7 @@ export class IrregularVerbsController{
         description: 'Json object for fault transaction, generic case.',
         type: FaultDto
     })
-    public async updateOne(@Req() requestExpress: Request, @Param("id") id: string, @Body() bodyDto: IrregularVerbDto): Promise<IrregularVerbDto>{
+    public async updateOne(@Req() requestExpress: Request, @Param("id") id: string, @Body() bodyDto: IrregularVerbDto): Promise<ResponseUpdateDto>{
 
         //
         let timeInit: number = 0;
@@ -546,7 +543,7 @@ export class IrregularVerbsController{
         let requestUrl = requestExpress.url.toString();
         let transactionId = String(requestExpress.headers.transactionid);
         let mongodbMetaData: MongodbMetaDataDto;
-        let response: IrregularVerbDto;
+        let response: ResponseUpdateDto;
         let loggerDto: LoggerDto;
 
         //
