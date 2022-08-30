@@ -31,9 +31,8 @@ export class ConfigAppService {
         return "error";
     }
 
-    public systemErrorHandler(system: string): string {
-        if(system.toLowerCase() === "oc") return "openshift";
-        return system.toLowerCase()
+    public systemErrorHandler(): string {
+        return "openshift";
     }
 
     public originSystemError(origyn: string): string {

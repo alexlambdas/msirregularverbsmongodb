@@ -40,6 +40,7 @@ export class UtilitiesService{
     }
 
 
+
     /**
      * 
      * @description 
@@ -53,6 +54,32 @@ export class UtilitiesService{
             //
             return (end-init)/1000;
     }
+
+
+
+    /**
+     * 
+     * @description 
+     * 
+     * 
+     */
+    public fnGetVerbString(verb: number): string{
+
+        return (
+            verb === 0 && "GET"
+            ||
+            verb === 1 && "GET"
+            ||
+            verb === 2 && "GET"
+            ||
+            verb === 3 && "PUT"
+            ||
+            verb === 4 && "POST"
+            ||
+            verb === 5 && "DEL"
+        )
+    }
+
 
 
     /**
@@ -72,7 +99,7 @@ export class UtilitiesService{
                 type: this.configApp.loggerInfo(),
                 applicationName: mongodbMetaData.applicationName,
                 methodName: mongodbMetaData.methodName,
-                verb: mongodbMetaData.verb.toString(),
+                verb: this.fnGetVerbString(mongodbMetaData.verb),
                 transactionId: mongodbMetaData.uuidv4,
                 level: undefined, //
                 layer: this.configApp.connectionLayer(),
@@ -85,6 +112,7 @@ export class UtilitiesService{
             };
             return this.loggerDto;
     }
+
 
 
     /**
@@ -104,7 +132,7 @@ export class UtilitiesService{
                 type: this.configApp.loggerInfo(),
                 applicationName: mongodbMetaData.applicationName,
                 methodName: mongodbMetaData.methodName,
-                verb: mongodbMetaData.verb.toString(),
+                verb: this.fnGetVerbString(mongodbMetaData.verb),
                 transactionId: mongodbMetaData.uuidv4,
                 level: undefined, //
                 layer: this.configApp.connectionLayer(),
@@ -117,6 +145,7 @@ export class UtilitiesService{
             };
             return this.loggerDto;
     }
+
 
 
     /**
@@ -136,7 +165,7 @@ export class UtilitiesService{
                 type: this.configApp.loggerError(),
                 applicationName: mongodbMetaData.applicationName,
                 methodName: mongodbMetaData.methodName,
-                verb: mongodbMetaData.verb.toString(),
+                verb: this.fnGetVerbString(mongodbMetaData.verb),
                 transactionId: mongodbMetaData.uuidv4,
                 level: undefined, //
                 layer: this.configApp.connectionLayer(),
@@ -149,6 +178,7 @@ export class UtilitiesService{
             };
             return this.loggerDto;
     }
+
 
 
     /**
@@ -168,7 +198,7 @@ export class UtilitiesService{
                 type: this.configApp.loggerError(),
                 applicationName: mongodbMetaData.applicationName,
                 methodName: mongodbMetaData.methodName,
-                verb: mongodbMetaData.verb.toString(),
+                verb: this.fnGetVerbString(mongodbMetaData.verb),
                 transactionId: mongodbMetaData.uuidv4,
                 level: undefined, //
                 layer: this.configApp.connectionLayer(),
@@ -181,6 +211,7 @@ export class UtilitiesService{
             };
             return this.loggerDto;
     }
+
 
 
     /**
@@ -203,7 +234,7 @@ export class UtilitiesService{
                     layer: this.configApp.connectionLayer(),
                     path: mongodbMetaData.backEndUrl,
                     detail: {
-                        systemErrorHandler: this.configApp.systemErrorHandler("oc"),
+                        systemErrorHandler: this.configApp.systemErrorHandler(),
                         originSystemError: this.configApp.originSystemError("mongo"),
                         originSystemErrorCode: customInternalFault.getStatus().toString(),
                         originSystemErrorMessage: this.configApp.errorMessage(),
@@ -214,6 +245,7 @@ export class UtilitiesService{
             return this.faultDto;
     }
 
+    
 
     /**
      * 
@@ -235,8 +267,8 @@ export class UtilitiesService{
                     layer: this.configApp.connectionLayer(),
                     path: mongodbMetaData.backEndUrl,
                     detail: {
-                        systemErrorHandler: this.configApp.systemErrorHandler("oc"),
-                        originSystemError: this.configApp.originSystemError("mongo"),
+                        systemErrorHandler: this.configApp.systemErrorHandler(),
+                        originSystemError: this.configApp.originSystemError("oc"),
                         originSystemErrorCode: customInternalFault.getStatus().toString(),
                         originSystemErrorMessage: customInternalFault.getResponse().toString(),
                         originSystemErrorDescription: this.configApp.errorDescriptionCircuitBreaker(mongodbMetaData.timeoutCircuitBreaker),

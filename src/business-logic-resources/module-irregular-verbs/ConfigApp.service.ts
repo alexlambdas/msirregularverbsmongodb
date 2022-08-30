@@ -11,10 +11,6 @@ export class ConfigAppService{
         return "info";
     }
 
-    public loggerError(): string {
-        return "error";
-    }
-
     public controllerLayer(): string {
         return "CONTROLLER_LAYER";
     }

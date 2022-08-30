@@ -46,12 +46,10 @@ export const okGetById =
 
 export const okGetByParams =
 {
-   "_id": "630bfc8bc221367c6deae074",
-   "baseForm": "bet",
-   "pastSimple": "bet",
-   "pastParticiple": "bet",
-   "traduction": "apostar",
-   "__v": 0
+   "baseForm": "blow",
+   "pastSimple": "blew",
+   "pastParticiple": "blown",
+   "traduction": "soplar"
 }
 
 export const okDelById =

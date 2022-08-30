@@ -2,7 +2,7 @@ version: "3.7"
 ###
 services:
     msirregularverbsmongodb:
-        image: alexlambdas/msirregularverbsmongodb:v.0.0.1
+        image: alexlambdas/msirregularverbsmongodb:v.0.0.2
         container_name: msirregularverbsmongodb
         ports:
             - 3000:3000

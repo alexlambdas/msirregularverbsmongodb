@@ -43,6 +43,13 @@ describe('Module common-resources-mongodb (e2e)', () => {
             .expect(200)
     });
 
+    it('/ (GET_BY_PARAMS) - success - http/200', () => {
+        return request(httpServer)
+            .get('/TestObject/microservice/crud/GET_BY_PARAMS/?baseForm=bend')
+            .set('transactionid', 'PA20220131000005')
+            .expect(200)
+    });
+
     it('/ (POST) - success - http/200', () => {
         return request(httpServer)
             .post('/TestObject/microservice/crud/POST')

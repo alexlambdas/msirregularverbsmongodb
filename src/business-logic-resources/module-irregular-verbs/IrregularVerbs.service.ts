@@ -1,6 +1,6 @@
 import { Inject, Injectable } from "@nestjs/common";
-import { MongodbMetaDataDto } from "src/common-resources-mongodb/dtos/MongodbMetaData.dto";
-import { CrudInterface, I_CRUD } from "src/common-resources-mongodb/module-mongodb/Crud.interface";
+import { MongodbMetaDataDto } from "../../common-resources-mongodb/dtos/MongodbMetaData.dto";
+import { CrudInterface, I_CRUD } from "../../common-resources-mongodb/module-mongodb/Crud.interface";
 
 @Injectable()
 export class IrregularVerbsService{

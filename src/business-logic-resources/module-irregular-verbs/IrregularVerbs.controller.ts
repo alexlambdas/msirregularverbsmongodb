@@ -1,13 +1,16 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Req, UseFilters, UsePipes, ValidationPipe } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Post, Put, Query, Req, UseFilters, UsePipes, ValidationPipe } from "@nestjs/common";
+import { ApiHeader, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { Request } from "express";
-import { LoggerDto } from "src/common-resources-mongodb/dtos/Logger.dto";
-import { MongodbMetaDataDto } from "src/common-resources-mongodb/dtos/MongodbMetaData.dto";
-import { ResponseDeleteDto } from "src/common-resources-mongodb/dtos/ResponseDelete.dto";
-import { VerbEnumDto } from "src/common-resources-mongodb/dtos/VerbEnum.dto";
-import { CustomHttpExceptionFilter } from "src/common-resources-mongodb/exceptions/CustomHttpExceptionFilter";
-import { UtilitiesService } from "src/common-resources-mongodb/module-utilities/Utilities.service";
-import { WinstonLoggerService } from "src/common-resources-mongodb/module-winston-logger/WinstonLogger.service";
+import { FaultDto } from "../../common-resources-mongodb/dtos/Fault.fault.dto";
+import { LoggerDto } from "../../common-resources-mongodb/dtos/Logger.dto";
+import { MongodbMetaDataDto } from "../../common-resources-mongodb/dtos/MongodbMetaData.dto";
+import { ResponseDeleteDto } from "../../common-resources-mongodb/dtos/ResponseDelete.dto";
+import { VerbEnumDto } from "../../common-resources-mongodb/dtos/VerbEnum.dto";
+import { CustomHttpExceptionFilter } from "../../common-resources-mongodb/exceptions/CustomHttpExceptionFilter";
+import { UtilitiesService } from "../../common-resources-mongodb/module-utilities/Utilities.service";
+import { WinstonLoggerService } from "../../common-resources-mongodb/module-winston-logger/WinstonLogger.service";
 import { IrregularVerbDto } from "../dtos/IrregularVerb.dto";
+import { IrregularVerbQueryDto } from "../dtos/IrregularVerbQuery.dto";
 import IrregularVerbsModel from "../schemas/IrregularVerbsModel.schema";
 import { ConfigAppService } from "./ConfigApp.service";
 import { IrregularVerbsService } from "./IrregularVerbs.service";
@@ -33,6 +36,38 @@ export class IrregularVerbsController{
     @Get("/GET_ALL")
     @UseFilters(CustomHttpExceptionFilter)
     @UsePipes(ValidationPipe)
+    @ApiTags('Path to get list of all objects')
+    @ApiHeader({
+        name: 'transactionid',
+        description: '[OPTIONAL] string for microservice traceability',
+        required: false,
+    })
+    @ApiResponse({
+        status: 200,
+        description: 'Json object for success transaction.',
+        type: IrregularVerbDto,
+        isArray: true
+    })
+    @ApiResponse({
+        status: 400,
+        description: 'Json object for fault transaction, Bad Request.',
+        type: FaultDto
+    })
+    @ApiResponse({
+        status: 404,
+        description: 'Json object for fault transaction, Not Found.',
+        type: FaultDto
+    })
+    @ApiResponse({
+        status: 503,
+        description: 'Json object for fault transaction, Circuit Breaker.',
+        type: FaultDto
+    })
+    @ApiResponse({
+        status: 500,
+        description: 'Json object for fault transaction, generic case.',
+        type: FaultDto
+    })
     public async getAll(@Req() requestExpress: Request): Promise<IrregularVerbDto[]>{
 
         //
@@ -78,7 +113,7 @@ export class IrregularVerbsController{
             type: this.configApp.loggerInfo(),
             applicationName: this.configApp.getApplicationName(),
             methodName: this.configApp.getMethodName(),
-            verb: mongodbMetaData.verb.toString(),
+            verb: this.util.fnGetVerbString(VerbEnumDto.GET_ALL),
             transactionId: transactionId,
             level: undefined, // 
             layer: this.configApp.controllerLayer(),
@@ -99,6 +134,38 @@ export class IrregularVerbsController{
     @Get("/GET_BY_ID/:id")
     @UseFilters(CustomHttpExceptionFilter)
     @UsePipes(ValidationPipe)
+    @ApiTags('Path to get one object by id')
+    @ApiHeader({
+        name: 'transactionid',
+        description: '[OPTIONAL] string for microservice traceability',
+        required: false,
+    })
+    @ApiResponse({
+        status: 200,
+        description: 'Json object for success transaction.',
+        type: IrregularVerbDto,
+        isArray: true
+    })
+    @ApiResponse({
+        status: 400,
+        description: 'Json object for fault transaction, Bad Request.',
+        type: FaultDto
+    })
+    @ApiResponse({
+        status: 404,
+        description: 'Json object for fault transaction, Not Found.',
+        type: FaultDto
+    })
+    @ApiResponse({
+        status: 503,
+        description: 'Json object for fault transaction, Circuit Breaker.',
+        type: FaultDto
+    })
+    @ApiResponse({
+        status: 500,
+        description: 'Json object for fault transaction, generic case.',
+        type: FaultDto
+    })
     public async getById(@Req() requestExpress: Request, @Param("id") id: string): Promise<IrregularVerbDto>{
 
         //
@@ -148,7 +215,97 @@ export class IrregularVerbsController{
             type: this.configApp.loggerInfo(),
             applicationName: this.configApp.getApplicationName(),
             methodName: this.configApp.getMethodName(),
-            verb: mongodbMetaData.verb.toString(),
+            verb: this.util.fnGetVerbString(VerbEnumDto.GET_BY_ID),
+            transactionId: transactionId,
+            level: undefined, // 
+            layer: this.configApp.controllerLayer(),
+            message: this.configApp.successMessage(),
+            processingTime: this.util.fnGetProcessingTime(timeEnd, timeInit),
+            timestamp: this.util.fnGetTimeZone(),
+            urlApi: mongodbMetaData.urlApi,
+            request: mongodbMetaData.urlApi,
+            response: JSON.stringify(response),
+        };
+        this.winston.audit(loggerDto);
+
+        //
+        return response;
+    }
+
+    @Get("/GET_BY_PARAMS/")
+    @UseFilters(CustomHttpExceptionFilter)
+    @UsePipes(ValidationPipe)
+    @ApiTags('Path to get one object by parameters')
+    @ApiHeader({
+        name: 'transactionid',
+        description: '[OPTIONAL] string for microservice traceability',
+        required: false,
+    })
+    @ApiResponse({
+        status: 200,
+        description: 'Json object for success transaction.',
+        type: IrregularVerbDto,
+        isArray: true
+    })
+    @ApiResponse({
+        status: 400,
+        description: 'Json object for fault transaction, Bad Request.',
+        type: FaultDto
+    })
+    @ApiResponse({
+        status: 404,
+        description: 'Json object for fault transaction, Not Found.',
+        type: FaultDto
+    })
+    @ApiResponse({
+        status: 503,
+        description: 'Json object for fault transaction, Circuit Breaker.',
+        type: FaultDto
+    })
+    @ApiResponse({
+        status: 500,
+        description: 'Json object for fault transaction, generic case.',
+        type: FaultDto
+    })
+    public async getByParams(@Req() requestExpress: Request, @Query() queryParams: IrregularVerbQueryDto): Promise<IrregularVerbDto>{
+
+        //
+        let timeInit: number = 0;
+        let timeEnd: number = 0;
+        let requestUrl = requestExpress.url.toString();
+        let transactionId = String(requestExpress.headers.transactionid);
+        let mongodbMetaData: MongodbMetaDataDto;
+        let response: IrregularVerbDto;
+        let loggerDto: LoggerDto;
+
+        //
+        mongodbMetaData = {
+            applicationName: this.configApp.getApplicationName(),
+            methodName: this.configApp.getMethodName(),
+            backEndUrl: this.configApp.getUrlMongodb(),
+            timeout: this.configApp.getTimeOutMongoDb(),
+            timeoutCircuitBreaker: this.configApp.getTimeOutCircuitBreaker(),
+            uuidv4: transactionId,
+            verb: VerbEnumDto.GET_BY_PARAMS,
+            mongooseModel: IrregularVerbsModel,
+            urlApi: requestUrl,
+            dbUsername: this.configApp.getUserMongodb(),
+            dbPassword: this.configApp.getPasswordMongodb(),
+            dbServerSelectionTimeoutMS: this.configApp.getTimeOutMongoDb(),
+            paramsObject: JSON.stringify(queryParams),
+        };
+
+        //
+        timeInit = new Date().getTime();
+        response = JSON.parse(await this.irregularVerbsService.crudMongodb(mongodbMetaData));
+        timeEnd = new Date().getTime();
+
+        //
+        loggerDto = {
+            type: this.configApp.loggerInfo(),
+            applicationName: this.configApp.getApplicationName(),
+            methodName: this.configApp.getMethodName(),
+            verb: this.util.fnGetVerbString(VerbEnumDto.GET_BY_PARAMS),
             transactionId: transactionId,
             level: undefined, // 
             layer: this.configApp.controllerLayer(),
@@ -168,6 +325,38 @@ export class IrregularVerbsController{
     @Post("/POST")
     @UseFilters(CustomHttpExceptionFilter)
     @UsePipes(ValidationPipe)
+    @ApiTags('Path to save one object')
+    @ApiHeader({
+        name: 'transactionid',
+        description: '[OPTIONAL] string for microservice traceability',
+        required: false,
+    })
+    @ApiResponse({
+        status: 200,
+        description: 'Json object for success transaction.',
+        type: IrregularVerbDto,
+        isArray: true
+    })
+    @ApiResponse({
+        status: 400,
+        description: 'Json object for fault transaction, Bad Request.',
+        type: FaultDto
+    })
+    @ApiResponse({
+        status: 404,
+        description: 'Json object for fault transaction, Not Found.',
+        type: FaultDto
+    })
+    @ApiResponse({
+        status: 503,
+        description: 'Json object for fault transaction, Circuit Breaker.',
+        type: FaultDto
+    })
+    @ApiResponse({
+        status: 500,
+        description: 'Json object for fault transaction, generic case.',
+        type: FaultDto
+    })
     public async postOne(@Req() requestExpress: Request, @Body() bodyDto: IrregularVerbDto): Promise<IrregularVerbDto>{
 
         //
@@ -206,7 +395,7 @@ export class IrregularVerbsController{
             type: this.configApp.loggerInfo(),
             applicationName: this.configApp.getApplicationName(),
             methodName: this.configApp.getMethodName(),
-            verb: mongodbMetaData.verb.toString(),
+            verb: this.util.fnGetVerbString(VerbEnumDto.POST_ONE),
             transactionId: transactionId,
             level: undefined, // 
             layer: this.configApp.controllerLayer(),
@@ -226,6 +415,38 @@ export class IrregularVerbsController{
     @Delete("/DELETE_ONE/:id")
     @UseFilters(CustomHttpExceptionFilter)
     @UsePipes(ValidationPipe)
+    @ApiTags('Path to delete one object')
+    @ApiHeader({
+        name: 'transactionid',
+        description: '[OPTIONAL] string for microservice traceability',
+        required: false,
+    })
+    @ApiResponse({
+        status: 200,
+        description: 'Json object for success transaction.',
+        type: IrregularVerbDto,
+        isArray: true
+    })
+    @ApiResponse({
+        status: 400,
+        description: 'Json object for fault transaction, Bad Request.',
+        type: FaultDto
+    })
+    @ApiResponse({
+        status: 404,
+        description: 'Json object for fault transaction, Not Found.',
+        type: FaultDto
+    })
+    @ApiResponse({
+        status: 503,
+        description: 'Json object for fault transaction, Circuit Breaker.',
+        type: FaultDto
+    })
+    @ApiResponse({
+        status: 500,
+        description: 'Json object for fault transaction, generic case.',
+        type: FaultDto
+    })
     public async delOne(@Req() requestExpress: Request, @Param("id") id: string): Promise<ResponseDeleteDto>{
 
         //
@@ -264,7 +485,7 @@ export class IrregularVerbsController{
             type: this.configApp.loggerInfo(),
             applicationName: this.configApp.getApplicationName(),
             methodName: this.configApp.getMethodName(),
-            verb: mongodbMetaData.verb.toString(),
+            verb: this.util.fnGetVerbString(VerbEnumDto.DELETE_ONE),
             transactionId: transactionId,
             level: undefined, // 
             layer: this.configApp.controllerLayer(),
@@ -285,6 +506,38 @@ export class IrregularVerbsController{
     @Put("UPDATE_ONE/:id")
     @UseFilters(CustomHttpExceptionFilter)
     @UsePipes(ValidationPipe)
+    @ApiTags('Path to update one object')
+    @ApiHeader({
+        name: 'transactionid',
+        description: '[OPTIONAL] string for microservice traceability',
+        required: false,
+    })
+    @ApiResponse({
+        status: 200,
+        description: 'Json object for success transaction.',
+        type: IrregularVerbDto,
+        isArray: true
+    })
+    @ApiResponse({
+        status: 400,
+        description: 'Json object for fault transaction, Bad Request.',
+        type: FaultDto
+    })
+    @ApiResponse({
+        status: 404,
+        description: 'Json object for fault transaction, Not Found.',
+        type: FaultDto
+    })
+    @ApiResponse({
+        status: 503,
+        description: 'Json object for fault transaction, Circuit Breaker.',
+        type: FaultDto
+    })
+    @ApiResponse({
+        status: 500,
+        description: 'Json object for fault transaction, generic case.',
+        type: FaultDto
+    })
     public async updateOne(@Req() requestExpress: Request, @Param("id") id: string, @Body() bodyDto: IrregularVerbDto): Promise<IrregularVerbDto>{
 
         //
@@ -324,7 +577,7 @@ export class IrregularVerbsController{
             type: this.configApp.loggerInfo(),
             applicationName: this.configApp.getApplicationName(),
             methodName: this.configApp.getMethodName(),
-            verb: mongodbMetaData.verb.toString(),
+            verb: this.util.fnGetVerbString(VerbEnumDto.UPDATE_ONE),
             transactionId: transactionId,
             level: undefined, // 
             layer: this.configApp.controllerLayer(),

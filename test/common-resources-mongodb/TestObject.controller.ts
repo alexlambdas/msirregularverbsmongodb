@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Inject, Param, Post, Put, Req, UseFilters, UsePipes, ValidationPipe } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Inject, Param, Post, Put, Query, Req, UseFilters, UsePipes, ValidationPipe } from "@nestjs/common";
 import { Request } from "express";
 import { MongodbMetaDataDto } from "../../src/common-resources-mongodb/dtos/MongodbMetaData.dto";
 import { ResponseDeleteDto } from "../../src/common-resources-mongodb/dtos/ResponseDelete.dto";
@@ -7,6 +7,7 @@ import { CustomHttpExceptionFilter } from "../../src/common-resources-mongodb/ex
 import { CrudInterface, I_CRUD } from "../../src/common-resources-mongodb/module-mongodb/Crud.interface";
 import { ConfigAppService } from "./ConfigApp.service";
 import { TestObjectDto } from "./dtos/TestObject.dto";
+import { TestObjectQueryDto } from "./dtos/TestObjectQuery.dto";
 import TestObjectModel from "./schemas/TestObjectModel.schema";
 
 
@@ -110,6 +111,42 @@ export class TestObjectController{
             }
         }
         
+        //
+        return response;
+    }
+
+
+    @Get("/GET_BY_PARAMS/")
+    @UseFilters(CustomHttpExceptionFilter)
+    @UsePipes(ValidationPipe)
+    public async getByParams(@Req() requestExpress: Request, @Query() queryParams: TestObjectQueryDto): Promise<TestObjectDto>{
+
+        //
+        let requestUrl = requestExpress.url.toString();
+        let transactionId = String(requestExpress.headers.transactionid);
+        let mongodbMetaData: MongodbMetaDataDto;
+        let response: TestObjectDto;
+
+        //
+        mongodbMetaData = {
+            applicationName: this.configApp.getApplicationName(),
+            methodName: this.configApp.getMethodName(),
+            backEndUrl: this.configApp.getUrlMongodb(),
+            timeout: this.configApp.getTimeOutMongoDb(),
+            timeoutCircuitBreaker: this.configApp.getTimeOutCircuitBreaker(),
+            uuidv4: transactionId,
+            verb: VerbEnumDto.GET_BY_PARAMS,
+            mongooseModel: TestObjectModel,
+            urlApi: requestUrl,
+            dbUsername: this.configApp.getUserMongodb(),
+            dbPassword: this.configApp.getPasswordMongodb(),
+            dbServerSelectionTimeoutMS: this.configApp.getTimeOutMongoDb(),
+            paramsObject: JSON.stringify(queryParams),
+        };
+
+        //
+        response = JSON.parse(await this.mongo.crud(mongodbMetaData));
+
         //
         return response;
     }

@@ -17,18 +17,24 @@ async function bootstrap() {
 	const config = new DocumentBuilder()
         .setTitle('Microservice - MSIrregularVerbsMongodb')
         .setDescription(`
-            Crud microservice for Irregular Verbs database in mongodb
+            This microservice let us perform crud operations in mongodb database. All operations are listed below.
+			Irregular verbs are the model object that we have chosen.
             
-            Verbs - Operations
+            Verbs && Operations
 
-                1) "GET_ALL"                  
+                1) "GET_ALL"
+				2) "GET_BY_ID"
+				3) "GET_BY_PARAMS"
+				4) "POST"        
+				5) "DELETE_ONE"
+				6) "UPDATE_ONE"                           
         `)
         .setVersion('1.0')
-        .addTag('alexLambdas')
+        .addTag('@alexlambdas')
         .build()
 
     const document = SwaggerModule.createDocument(app, config);
-    SwaggerModule.setup('/api-docs/MSIrregularVerbs/microservice/crud', app, document);
+    SwaggerModule.setup('/api-docs/app/rs/portfolio/msirregularverbsmongodb/crud', app, document);
 
 
 	/**

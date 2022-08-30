@@ -66,7 +66,7 @@ export class CustomHttpExceptionFilter implements ExceptionFilter{
                         originSystemErrorCode: (customInternalFault.statusCode).toString(),
                         originSystemErrorMessage: customInternalFault.error,
                         originSystemErrorDescription: Array.isArray(customInternalFault.message) ? (
-                            (customInternalFault.message).reduce(reduceMessage)
+                            customInternalFault.message.reduce(reduceMessage)
                         ) : (
                             customInternalFault.message
                         ),

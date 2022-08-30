@@ -1,8 +1,8 @@
 import { CustomHttpHandlerException } from "../../src/common-resources-mongodb/exceptions/CustomHttpHandlerException";
 import { CreateDbConnectionDto } from "../../src/common-resources-mongodb/dtos/CreateDbConnection.dto";
 import { MongodbInterface } from "../../src/common-resources-mongodb/module-mongodb/Mongodb.interface";
-import { TestObjectDto } from "./dtos/TestObject.dto";
 import { okDelById, okGetAll, okGetById, okGetByParams, okUpdateById } from "./MockMongodbResponses.spec";
+import { IrregularVerbDto } from "../../src/business-logic-resources/dtos/IrregularVerb.dto";
 
 
 export class MockMongodbService implements MongodbInterface{
@@ -20,15 +20,15 @@ export class MockMongodbService implements MongodbInterface{
     }
 
     async customFindByParams(mongooseModel: any, paramsObjectDto: string): Promise<string> {
-        let params: TestObjectDto = JSON.parse(paramsObjectDto);
-        if(params.baseForm === "bend"){
+        let params: IrregularVerbDto = JSON.parse(paramsObjectDto);
+        if(params.baseForm === "blow"){
             return JSON.stringify(okGetByParams);
         }
     }
 
     async customFindOne(bodyDto: string, mongooseModel: any): Promise<string> {
-        let testObjectDto: TestObjectDto = JSON.parse(bodyDto);
-        if(testObjectDto.baseForm === "build"){
+        let irregularVerbDto: IrregularVerbDto = JSON.parse(bodyDto);
+        if(irregularVerbDto.baseForm === "build"){
             return bodyDto;
         }
         else{
