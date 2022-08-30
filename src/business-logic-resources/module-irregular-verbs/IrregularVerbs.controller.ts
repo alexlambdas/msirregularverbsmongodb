@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, Query, Req, UseFilters, UsePipes, ValidationPipe } from "@nestjs/common";
 import { ApiHeader, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { Request } from "express";
-import { ResponseUpdateDto } from "src/common-resources-mongodb/dtos/ResponseUpdate.dto";
+import { ResponseUpdateDto } from "../../common-resources-mongodb/dtos/ResponseUpdate.dto";
 import { FaultDto } from "../../common-resources-mongodb/dtos/Fault.fault.dto";
 import { LoggerDto } from "../../common-resources-mongodb/dtos/Logger.dto";
 import { MongodbMetaDataDto } from "../../common-resources-mongodb/dtos/MongodbMetaData.dto";
